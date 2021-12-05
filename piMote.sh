@@ -1,16 +1,21 @@
 #!/bin/bash
+# PiMote interface script by Thomas Galea.
+# Script allows easy use of Energenie's PiMote board within Bash.
+#
+# You are free to do what you want with this script. Use it, modify it, improve it. I just ask that you keep my credit.
 
-# Code
+# Pins used for code.
 D0="/sys/class/gpio/gpio17/value"
 D1="/sys/class/gpio/gpio22/value"
 D2="/sys/class/gpio/gpio23/value"
 D3="/sys/class/gpio/gpio27/value"
-# Mode & Modulator
+# Pins used for Mode & Modulator (Mode isn't used in this script, but we don't want it floating).
 MS="/sys/class/gpio/gpio24/value"
 MD="/sys/class/gpio/gpio25/value"
 
 code=""
 
+# Print usage info if invalid entries.
 function help {
 	printf "Usage:\n"
 	printf "	$0 [socket number] [new state]\n\n"
@@ -20,6 +25,7 @@ function help {
 	exit 2
 }
 
+# Identify what socket to target.
 case ${1,,} in
 	all|0) code=110;;
 	    1) code=111;;
@@ -29,6 +35,7 @@ case ${1,,} in
 	    *) printf "Unrecognised socket number!\n\n";help;;
 esac
 
+# Identify whether to turn on or off.
 case ${2,,} in
 	0|off) code="$code"0;;
 	1|on)  code="$code"1;;
